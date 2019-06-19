@@ -39,13 +39,14 @@ class QuickFilterServiceProvider extends ServiceProvider
     }
 
     /**
-     * Boot macros
+     * Boot macros. Black magic.
      */
     private function bootMacros()
     {
         Builder::macro('filter', function (array $data, array $filters = null) {
-            /** @var Builder $this */
-            return (new quickFilter())->apply($this, $data, $filters);
+            /** @var Builder $builder */
+            $builder = $this;
+            return (new QuickFilter())->apply($builder, $data, $filters);
         });
     }
 }
