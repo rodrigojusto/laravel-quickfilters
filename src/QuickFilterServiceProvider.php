@@ -44,6 +44,7 @@ class QuickFilterServiceProvider extends ServiceProvider
     private function bootMacros()
     {
         Builder::macro('filter', function (array $data, array $filters = null) {
+            /** @var Builder $this */
             return (new quickFilter())->apply($this, $data, $filters);
         });
     }
