@@ -2,9 +2,9 @@
 
 namespace Avikuloff\QuickFilter;
 
-use Illuminate\Support\ServiceProvider;
-use Illuminate\Database\Eloquent\Builder;
 use Avikuloff\QuickFilter\Console\Commands\MakeFilterCommand;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\ServiceProvider;
 
 /**
  * Class QuickFiltersServiceProvider
@@ -20,29 +20,15 @@ class QuickFilterServiceProvider extends ServiceProvider
     public function boot()
     {
         if ($this->app->runningInConsole()) {
-            $this->bootCommands();
+            $this->publishes([
+                __DIR__ . '/../config/quickfilter.php' => config_path('quickfilter.php'),
+            ], 'config');
+
+            $this->commands([
+                MakeFilterCommand::class,
+            ]);
         }
 
-        $this->bootMacros();
-    }
-
-    /**
-     * Boot the custom commands
-     *
-     * @return void
-     */
-    private function bootCommands()
-    {
-        $this->commands([
-            MakeFilterCommand::class,
-        ]);
-    }
-
-    /**
-     * Boot macros. Black magic.
-     */
-    private function bootMacros()
-    {
         Builder::macro('filter', function (array $data, array $filters = null) {
             /** @var Builder $builder */
             $builder = $this;
