@@ -1,7 +1,13 @@
 {
     "name": "avikuloff/laravel-quickfilter",
     "description": "A quick way to filter eloquent models",
-    "keywords": ["filter", "search", "laravel", "eloquent", "request"],
+    "keywords": [
+        "filter",
+        "search",
+        "laravel",
+        "eloquent",
+        "builder"
+    ],
     "type": "library",
     "license": "MIT",
     "authors": [
@@ -13,8 +19,8 @@
     "require": {
         "php": "^7.1.3",
         "illuminate/support": "5.8.*",
-        "illuminate/database": "5.8.*",
         "illuminate/console": "5.8.*",
+        "illuminate/database": "5.8.*",
         "mpociot/pipeline": "^1.0"
     },
     "require-dev": {
@@ -28,7 +34,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Avikuloff\\QuickFilter\\": "tests"
+            "Avikuloff\\QuickFilter\\Tests\\": "tests"
         }
     },
     "extra": {
