@@ -2,9 +2,8 @@
 
 namespace Avikuloff\QuickFilter;
 
-use Mpociot\Pipeline\Pipeline;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Mpociot\Pipeline\Pipeline;
 
 /**
  * Class QuickFilter
@@ -13,6 +12,8 @@ use Illuminate\Database\Eloquent\Builder;
 class QuickFilter
 {
     /**
+     * Carry through the pipeline Query Builder, applying filters.
+     *
      * @param Builder $builder
      * @param array $data
      * @param array|null $filters
@@ -20,7 +21,7 @@ class QuickFilter
      */
     public function apply(Builder $builder, array $data, array $filters = null): Builder
     {
-        $filters = $this->getFilters($builder->getModel(), $filters);
+        $filters = $this->getFilters($builder, $filters);
 
         return (new Pipeline())
             ->send($builder)
@@ -32,17 +33,32 @@ class QuickFilter
     }
 
     /**
-     * @param Model $model
+     * If the list of keys is passed, it returns the list of filters otherwise,
+     * it will return all filters available for the model.
+     *
+     * @param Builder $builder
      * @param array|null $filters
      * @return array
      */
-    protected function getFilters(Model $model, array $filters = null): array
+    protected function getFilters(Builder $builder, array $filters = null): array
     {
-        // TODO Change filter list provider
+        $availableFilters = $this->getAvailableFilters(get_class($builder->getModel()));
+
         if (is_null($filters)) {
-            return $model->filters;
+            return $availableFilters;
         }
 
-        return array_intersect_key($model->filters, array_flip($filters));
+        return array_intersect_key($availableFilters, array_flip($filters));
+    }
+
+    /**
+     * Returns a list of all filters available for the model.
+     *
+     * @param string $model
+     * @return array
+     */
+    protected function getAvailableFilters(string $model): array
+    {
+        return config('quickfilter.groups' . $model);
     }
 }
