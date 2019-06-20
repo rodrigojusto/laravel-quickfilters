@@ -34,7 +34,7 @@ class QuickFilter
 
     /**
      * If the list of keys is passed, it returns the list of filters otherwise,
-     * it will return all filters available for the model.
+     * it will return all available filters for the model.
      *
      * @param Builder $builder
      * @param array|null $filters
