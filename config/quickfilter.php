@@ -1,12 +1,15 @@
 <?php
 
 return [
+
     'groups' => [
         /*
-        'users' => [
-            'name' => 'App\Filters\NameFilter',
-            'email' => 'App\Filters\EmailFilter',
-        ],
+        * Examples
+        *
+        * App\Post::class => [
+        *    'title' => 'App\Filters\TitleFilter',
+        *    'date' => 'App\Filters\DateFilter',
+         * ],
         */
     ],
 ];
