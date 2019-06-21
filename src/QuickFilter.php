@@ -59,6 +59,6 @@ class QuickFilter
      */
     protected function getAvailableFilters(string $model): array
     {
-        return config('quickfilter.groups' . $model);
+        return config('quickfilter.groups.' . $model);
     }
 }
