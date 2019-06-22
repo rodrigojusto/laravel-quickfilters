@@ -1,0 +1,56 @@
+{
+    "name": "avikuloff/laravel-quickfilters",
+    "description": "Quick filters for eloquent query builder",
+    "keywords": [
+        "filter",
+        "search",
+        "laravel",
+        "eloquent",
+        "builder"
+    ],
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Andrey Vikulov",
+            "email": "avikuloff@yandex.ru"
+        }
+    ],
+    "require": {
+        "php": "^7.1.3",
+        "illuminate/console": "5.8.*",
+        "illuminate/database": "5.8.*",
+      "illuminate/support": "5.8.*",
+        "mpociot/pipeline": "^1.0"
+    },
+    "require-dev": {
+        "nunomaduro/larastan": "^0.3.17",
+        "orchestra/testbench": "^3.8",
+        "phpunit/phpunit": "^8.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Avikuloff\\QuickFilters\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Avikuloff\\QuickFilters\\Tests\\": "tests"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        },
+        "laravel": {
+            "providers": [
+                "Avikuloff\\QuickFilters\\QuickFiltersServiceProviders"
+            ]
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

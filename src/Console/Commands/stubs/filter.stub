@@ -1,0 +1,26 @@
+<?php
+
+namespace DummyNamespace;
+
+use Closure;
+use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Builder;
+use Avikuloff\QuickFilters\Contracts\Filter;
+
+class DummyClass implements Filter
+{
+    /**
+     * @param Builder $query
+     * @param Closure $next
+     * @param Collection $collection
+     * @return Builder
+     */
+    public function handle(Builder $query, Closure $next, Collection $collection): Builder
+    {
+        if ($collection->has('param')) {
+            $query->where('table_name', $collection->get('param'));
+        }
+
+        return $next($query);
+    }
+}
