@@ -89,4 +89,4 @@ namespace Illuminate\Database\Eloquent {
 
 ## License
 
-The MIT License (MIT). See [License File](LICENSE.md) for more information.
+The MIT License (MIT). See [License File](LICENSE) for more information.
