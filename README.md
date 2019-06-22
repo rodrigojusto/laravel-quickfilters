@@ -1,2 +1,2 @@
-# laravel-quickfilters
-Quick filters for eloquent query builder
+# Laravel QuickFilters
+Quick filters for eloquent query builder.
