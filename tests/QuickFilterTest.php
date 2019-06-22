@@ -2,7 +2,6 @@
 
 namespace Avikuloff\QuickFilter\Tests;
 
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Application;
 use Orchestra\Testbench\TestCase;
 
@@ -14,7 +13,6 @@ class EloquentBuilderFilterMacroTest extends TestCase
     {
         $builder = UserModelStub::query();
         $builder = $builder->filter($this->data, ['name']);
-        /** @var Builder $builder */
         $value = $builder->getQuery()->wheres[0]['value'];
 
         $this->assertSame('John Doe', $value);
@@ -24,7 +22,6 @@ class EloquentBuilderFilterMacroTest extends TestCase
     {
         $builder = UserModelStub::query();
         $builder = $builder->filter($this->data);
-        /** @var Builder $builder */
         $value = $builder->getQuery()->wheres[0]['value'];
 
         $this->assertSame('John Doe', $value);
@@ -34,7 +31,6 @@ class EloquentBuilderFilterMacroTest extends TestCase
     {
         $builder = UserModelStub::query();
         $builder = $builder->filter($this->data, ['invalidFilterKey', 'name']);
-        /** @var Builder $builder */
         $value = $builder->getQuery()->wheres[0]['value'];
 
         $this->assertSame('John Doe', $value);
@@ -63,6 +59,9 @@ class EloquentBuilderFilterMacroTest extends TestCase
      */
     protected function getEnvironmentSetUp($app)
     {
-        $app['config']->set('quickfilter.groups.Avikuloff\QuickFilter\Tests\UserModelStub.name', 'Avikuloff\QuickFilter\Tests\NameFilterStub');
+        $app['config']->set(
+            'quickfilter.groups.Avikuloff\QuickFilter\Tests\UserModelStub.name',
+            'Avikuloff\QuickFilter\Tests\NameFilterStub'
+        );
     }
 }
