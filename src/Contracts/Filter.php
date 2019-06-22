@@ -1,14 +1,14 @@
 <?php
 
-namespace Avikuloff\QuickFilter\Contracts;
+namespace Avikuloff\QuickFilters\Contracts;
 
 use Closure;
-use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
 
 /**
  * Interface Filter
- * @package Avikuloff\QuickFilter\Filters
+ * @package Avikuloff\QuickFilters\Filters
  */
 interface Filter
 {

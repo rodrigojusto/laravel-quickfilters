@@ -1,15 +1,15 @@
 <?php
 
-namespace Avikuloff\QuickFilter;
+namespace Avikuloff\QuickFilters;
 
 use Illuminate\Database\Eloquent\Builder;
 use Mpociot\Pipeline\Pipeline;
 
 /**
- * Class QuickFilter
- * @package Avikuloff\QuickFilter
+ * Class EloquentFilter
+ * @package Avikuloff\QuickFilters
  */
-class QuickFilter
+class EloquentFilter
 {
     /**
      * Carry through the pipeline Query Builder, applying filters.
@@ -59,6 +59,6 @@ class QuickFilter
      */
     protected function getAvailableFilters(string $model): array
     {
-        return config('quickfilter.groups.' . $model);
+        return config('quickfilters.groups.' . $model);
     }
 }

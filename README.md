@@ -19,18 +19,18 @@ $query->filter($request->all(), ['name', 'email']);
 ## Installation
 Via composer:
 ```bash
-composer require avikuloff/laravel-quickfilter
+composer require avikuloff/laravel-quickfilters
 ```
 
 If you are not using automatic package auto-discovery, then you need to add a service provider to `config/app.php`.
 ```php
-'Avikuloff\QuickFilter\QuickFilterServiceProvider'
+'Avikuloff\QuickFilters\QuickFiltersServiceProvider'
 ```
 
 ## Configuration
 Publish the configuration file with:
 ```bash
-php artisan vendor:publish --provider="Avikuloff\QuickFilter\QuickFilterServiceProvider" --tag="config"
+php artisan vendor:publish --provider="Avikuloff\QuickFilters\QuickFiltersServiceProvider" --tag="config"
 ```
 
 ## Creation and configuration
@@ -45,7 +45,7 @@ php artisan make:filter App\EmailFilter
 ```
 
 Next, register the created filter.
-Open the `config/quickfilter.php` and add a new filter group.
+Open the `config/quickfilters.php` and add a new filter group.
 Specify the path to your model as the key of the array.
 Then list all available filters for the group.
 

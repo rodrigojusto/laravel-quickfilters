@@ -5,7 +5,7 @@ namespace DummyNamespace;
 use Closure;
 use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Builder;
-use Avikuloff\QuickFilter\Contracts\Filter;
+use Avikuloff\QuickFilters\Contracts\Filter;
 
 class DummyClass implements Filter
 {

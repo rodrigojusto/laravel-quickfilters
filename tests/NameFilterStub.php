@@ -1,8 +1,8 @@
 <?php
 
-namespace Avikuloff\QuickFilter\Tests;
+namespace Avikuloff\QuickFilters\Tests;
 
-use Avikuloff\QuickFilter\Contracts\Filter;
+use Avikuloff\QuickFilters\Contracts\Filter;
 use Closure;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;

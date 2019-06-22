@@ -1,6 +1,6 @@
 <?php
 
-namespace Avikuloff\QuickFilter\Console\Commands;
+namespace Avikuloff\QuickFilters\Console\Commands;
 
 use Illuminate\Console\GeneratorCommand;
 

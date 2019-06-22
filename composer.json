@@ -1,6 +1,6 @@
 {
-    "name": "avikuloff/laravel-quickfilter",
-    "description": "A quick way to filter eloquent models",
+    "name": "avikuloff/laravel-quickfilters",
+    "description": "Quick filters for eloquent query builder",
     "keywords": [
         "filter",
         "search",
@@ -30,12 +30,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Avikuloff\\QuickFilter\\": "src"
+            "Avikuloff\\QuickFilters\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Avikuloff\\QuickFilter\\Tests\\": "tests"
+            "Avikuloff\\QuickFilters\\Tests\\": "tests"
         }
     },
     "extra": {
@@ -44,7 +44,7 @@
         },
         "laravel": {
             "providers": [
-                "Avikuloff\\QuickFilter\\QuickFilterServiceProvider"
+                "Avikuloff\\QuickFilters\\QuickFiltersServiceProviders"
             ]
         }
     },

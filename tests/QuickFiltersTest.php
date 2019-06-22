@@ -1,6 +1,6 @@
 <?php
 
-namespace Avikuloff\QuickFilter\Tests;
+namespace Avikuloff\QuickFilters\Tests;
 
 use Illuminate\Foundation\Application;
 use Orchestra\Testbench\TestCase;
@@ -48,7 +48,7 @@ class EloquentBuilderFilterMacroTest extends TestCase
 
     protected function getPackageProviders($app)
     {
-        return ['Avikuloff\QuickFilter\QuickFilterServiceProvider'];
+        return ['Avikuloff\QuickFilters\QuickFiltersServiceProvider'];
     }
 
     /**
@@ -60,8 +60,8 @@ class EloquentBuilderFilterMacroTest extends TestCase
     protected function getEnvironmentSetUp($app)
     {
         $app['config']->set(
-            'quickfilter.groups.Avikuloff\QuickFilter\Tests\UserModelStub.name',
-            'Avikuloff\QuickFilter\Tests\NameFilterStub'
+            'quickfilters.groups.Avikuloff\QuickFilters\Tests\UserModelStub.name',
+            'Avikuloff\QuickFilters\Tests\NameFilterStub'
         );
     }
 }

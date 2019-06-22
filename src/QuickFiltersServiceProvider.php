@@ -1,8 +1,8 @@
 <?php
 
-namespace Avikuloff\QuickFilter;
+namespace Avikuloff\QuickFilters;
 
-use Avikuloff\QuickFilter\Console\Commands\MakeFilterCommand;
+use Avikuloff\QuickFilters\Console\Commands\MakeFilterCommand;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\ServiceProvider;
 
@@ -10,7 +10,7 @@ use Illuminate\Support\ServiceProvider;
  * Class QuickFiltersServiceProvider
  * @package App\Providers
  */
-class QuickFilterServiceProvider extends ServiceProvider
+class QuickFiltersServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap services.
@@ -21,7 +21,7 @@ class QuickFilterServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__ . '/../config/quickfilter.php' => config_path('quickfilter.php'),
+                __DIR__ . '/../config/quickfilters.php' => config_path('quickfilters.php'),
             ], 'config');
 
             $this->commands([
@@ -32,7 +32,7 @@ class QuickFilterServiceProvider extends ServiceProvider
         Builder::macro('filter', function (array $data, array $filters = null) {
             /** @var Builder $builder */
             $builder = $this;
-            return (new QuickFilter())->apply($builder, $data, $filters);
+            return (new EloquentFilter())->apply($builder, $data, $filters);
         });
     }
 }

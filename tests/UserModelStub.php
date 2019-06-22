@@ -1,6 +1,6 @@
 <?php
 
-namespace Avikuloff\QuickFilter\Tests;
+namespace Avikuloff\QuickFilters\Tests;
 
 use Illuminate\Database\Eloquent\Model;
 
