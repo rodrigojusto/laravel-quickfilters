@@ -17,8 +17,8 @@ class DummyClass implements Filter
      */
     public function handle(Builder $query, Closure $next, Collection $collection): Builder
     {
-        if ($collection->has('param')) {
-            $query->where('table_name', $collection->get('param'));
+        if ($collection->has('key')) {
+            $query->where('field', $collection->get('key'));
         }
 
         return $next($query);
