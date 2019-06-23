@@ -24,7 +24,6 @@
         "mpociot/pipeline": "^1.0"
     },
     "require-dev": {
-        "nunomaduro/larastan": "^0.3.17",
         "orchestra/testbench": "^3.8",
         "phpunit/phpunit": "^8.2"
     },
@@ -39,9 +38,6 @@
         }
     },
     "extra": {
-        "branch-alias": {
-            "dev-master": "1.0-dev"
-        },
         "laravel": {
             "providers": [
                 "Avikuloff\\QuickFilters\\QuickFiltersServiceProvider"
