@@ -11,7 +11,7 @@ class MakeFilterCommand extends GeneratorCommand
      *
      * @var string
      */
-    protected $signature = 'make:filter {name : The name of the class}';
+    protected $signature = 'make:filter {name* : The name of the class}';
 
     /**
      * The console command description.
@@ -26,6 +26,37 @@ class MakeFilterCommand extends GeneratorCommand
      * @var string
      */
     protected $type = 'Filter';
+
+    public function handle()
+    {
+        $names = array_map('trim', $this->arguments()['name']);
+
+        foreach ($names as $name) {
+            $name = $this->qualifyClass($name);
+
+            $path = $this->getPath($name);
+
+            // First we will check to see if the class already exists. If it does, we don't want
+            // to create the class and overwrite the user's code. So, we will bail out so the
+            // code is untouched. Otherwise, we will continue generating this class' files.
+            if ((!$this->hasOption('force') ||
+                    !$this->option('force')) &&
+                $this->alreadyExists($name)) {
+                $this->error("{$this->type} {$name} already exists!");
+
+                return false;
+            }
+
+            // Next, we will generate the path to the location where this class' file should get
+            // written. Then, we will build the class and make the proper replacements on the
+            // stub files so that it gets the correctly formatted namespace and class name.
+            $this->makeDirectory($path);
+
+            $this->files->put($path, $this->buildClass($name));
+
+            $this->info("{$this->type} {$name} created successfully.");
+        }
+    }
 
     /**
      * Get the stub file for the generator.
