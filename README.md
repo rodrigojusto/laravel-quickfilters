@@ -38,7 +38,10 @@ Use the following Artisan command to create a new filter class:
 ```bash
 php artisan make:filter EmailFilter
 ```
-
+To create multiple filters, list them separated by spaces:
+```bash
+php artisan make:filter NameFilter EmailFilter JobTitleFilter
+```
 By default, files are published in the `App\Filters` directory; you can change this by specifying the class name along with the namespace:
 ```bash
 php artisan make:filter App\EmailFilter
