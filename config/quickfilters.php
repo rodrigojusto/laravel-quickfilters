@@ -2,11 +2,10 @@
 
 return [
     'groups' => [
-        /*
-         * 'App\Post' => [
-         * 'title' => 'App\Filters\TitleFilter',
-         * 'date' => 'App\Filters\DateFilter',
-         * ],
-        */
+        'users' => [
+            // App\Filters\NameFilter::class,
+            // App\Filters\EmailFilter::class,
+            // App\Filters\CreatedFilter::class,
+        ],
     ],
 ];

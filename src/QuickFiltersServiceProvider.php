@@ -3,7 +3,8 @@
 namespace Avikuloff\QuickFilters;
 
 use Avikuloff\QuickFilters\Console\Commands\MakeFilterCommand;
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
+use Illuminate\Database\Query\Builder as DatabaseBuilder;
 use Illuminate\Support\ServiceProvider;
 
 /**
@@ -29,10 +30,16 @@ class QuickFiltersServiceProvider extends ServiceProvider
             ]);
         }
 
-        Builder::macro('filter', function (array $data, array $filters = null) {
-            /** @var Builder $builder */
+        DatabaseBuilder::macro('filter', function (array $data, array $filters = null) {
+            /** @var DatabaseBuilder $builder */
             $builder = $this;
-            return (new EloquentFilter())->apply($builder, $data, $filters);
+            return (new QuickFilters($builder))->apply($data, $filters);
+        });
+
+        EloquentBuilder::macro('filter', function (array $data, array $filters = null) {
+            /** @var EloquentBuilder $builder */
+            $builder = $this;
+            return (new QuickFilters($builder))->apply($data, $filters);
         });
     }
 }

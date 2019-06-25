@@ -1,6 +1,6 @@
 <?php
 
-namespace Avikuloff\QuickFilters\Tests;
+namespace Avikuloff\QuickFilters\Tests\Stubs;
 
 use Illuminate\Database\Eloquent\Model;
 

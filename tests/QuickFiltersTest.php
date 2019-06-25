@@ -2,17 +2,29 @@
 
 namespace Avikuloff\QuickFilters\Tests;
 
+use Avikuloff\QuickFilters\QuickFilters;
+use Avikuloff\QuickFilters\QuickFiltersServiceProvider;
+use Avikuloff\QuickFilters\Tests\Stubs\EmailFilterStub;
+use Avikuloff\QuickFilters\Tests\Stubs\NameFilterStub;
+use Avikuloff\QuickFilters\Tests\Stubs\UserModelStub;
 use Illuminate\Foundation\Application;
 use Orchestra\Testbench\TestCase;
 
-class EloquentBuilderFilterMacroTest extends TestCase
+class QuickFiltersTest extends TestCase
 {
+    /**
+     * @var \Illuminate\Database\Eloquent\Builder
+     */
+    protected $builder;
+
+    /**
+     * @var array
+     */
     protected $data;
 
     public function testFilterMacroWithFilters()
     {
-        $builder = UserModelStub::query();
-        $builder = $builder->filter($this->data, ['name']);
+        $builder = $this->builder->filter($this->data, [NameFilterStub::class]);
         $value = $builder->getQuery()->wheres[0]['value'];
 
         $this->assertSame('John Doe', $value);
@@ -20,20 +32,39 @@ class EloquentBuilderFilterMacroTest extends TestCase
 
     public function testFilterMacroWithoutFilters()
     {
-        $builder = UserModelStub::query();
-        $builder = $builder->filter($this->data);
+        $builder = $this->builder->filter($this->data);
+        $name = $builder->getQuery()->wheres[0]['value'];
+        $email = $builder->getQuery()->wheres[1]['value'];
+
+        $this->assertSame('John Doe', $name);
+        $this->assertSame('johndoe@example.com', $email);
+    }
+
+    public function testFilterMacroWithInvalidFilters()
+    {
+        $builder = $this->builder->filter($this->data, ['invalid', NameFilterStub::class, 'otherInvalidFilter']);
         $value = $builder->getQuery()->wheres[0]['value'];
 
         $this->assertSame('John Doe', $value);
     }
 
-    public function testFilterMacroWithInvalidFilterKey()
+    public function testFilterExcept()
     {
-        $builder = UserModelStub::query();
-        $builder = $builder->filter($this->data, ['invalidFilterKey', 'name']);
-        $value = $builder->getQuery()->wheres[0]['value'];
+        $filter = (new QuickFilters($this->builder))->except($this->data, [NameFilterStub::class]);
+        $column = $filter->getQuery()->wheres[0]['column'];
 
-        $this->assertSame('John Doe', $value);
+        $this->assertArrayNotHasKey(1, $filter->getQuery()->wheres);
+        $this->assertNotSame('name', $column);
+    }
+
+    public function testFilterExceptWithInvalidFilterKeys()
+    {
+        $filter = (new QuickFilters($this->builder))
+            ->except($this->data, ['invalidFilterKey', NameFilterStub::class, 'otherInvalidFilterKey']);
+        $column = $filter->getQuery()->wheres[0]['column'];
+
+        $this->assertArrayNotHasKey(1, $filter->getQuery()->wheres);
+        $this->assertNotSame('name', $column);
     }
 
     /**
@@ -43,12 +74,14 @@ class EloquentBuilderFilterMacroTest extends TestCase
     {
         parent::setUp();
 
-        $this->data = ['name' => 'John Doe'];
+        $this->builder = UserModelStub::query();
+
+        $this->data = ['name' => 'John Doe', 'email' => 'johndoe@example.com'];
     }
 
     protected function getPackageProviders($app)
     {
-        return ['Avikuloff\QuickFilters\QuickFiltersServiceProvider'];
+        return [QuickFiltersServiceProvider::class];
     }
 
     /**
@@ -60,8 +93,12 @@ class EloquentBuilderFilterMacroTest extends TestCase
     protected function getEnvironmentSetUp($app)
     {
         $app['config']->set(
-            'quickfilters.groups.Avikuloff\QuickFilters\Tests\UserModelStub.name',
-            'Avikuloff\QuickFilters\Tests\NameFilterStub'
+            'quickfilters.groups.user_model_stubs.name',
+            NameFilterStub::class
+        );
+        $app['config']->set(
+            'quickfilters.groups.user_model_stubs.email',
+            EmailFilterStub::class
         );
     }
 }
