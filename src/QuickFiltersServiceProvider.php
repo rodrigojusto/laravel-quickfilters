@@ -30,13 +30,13 @@ class QuickFiltersServiceProvider extends ServiceProvider
             ]);
         }
 
-        DatabaseBuilder::macro('filter', function (array $data, array $filters = null) {
+        DatabaseBuilder::macro('filter', function (array $data, array $filters = null): DatabaseBuilder {
             /** @var DatabaseBuilder $builder */
             $builder = $this;
             return (new QuickFilters($builder))->apply($data, $filters);
         });
 
-        EloquentBuilder::macro('filter', function (array $data, array $filters = null) {
+        EloquentBuilder::macro('filter', function (array $data, array $filters = null): EloquentBuilder {
             /** @var EloquentBuilder $builder */
             $builder = $this;
             return (new QuickFilters($builder))->apply($data, $filters);

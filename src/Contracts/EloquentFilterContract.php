@@ -7,16 +7,16 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 
 /**
- * Interface Filter
+ * Interface EloquentFilter
  * @package Avikuloff\QuickFilters\Filters
  */
-interface Filter
+interface EloquentFilterContract
 {
     /**
-     * @param Builder $query
+     * @param Builder $builder
      * @param Closure $next
      * @param Collection $collection
      * @return Builder
      */
-    public function handle(Builder $query, Closure $next, Collection $collection): Builder;
+    public function handle(Builder $builder, Closure $next, Collection $collection): Builder;
 }

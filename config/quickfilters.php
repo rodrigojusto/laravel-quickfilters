@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'namespace' => '\App\Filters',
+    'namespace' => 'App\Filters',
 
     'groups' => [
         'users' => [

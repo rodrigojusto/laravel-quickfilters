@@ -1,124 +1,160 @@
 # Laravel QuickFilters
-Simple pipeline and reusable filters for Eloquent Query Builder
+The package allows to quickly build a query to the database.
 
-## Usage
-Apply all filters for 'App\User':
+## Basic example
 ```php
-$query = App\User::query();
-$query->filter($request->all());
+// GET /jobs?title=Ingeener&salary=100000&job_type=1&city=new-york,category= ...
+
+Class JobController
+...
+public function search(Request $request)
+{
+    // via Eloquent and macro
+    $jobs = Job::query()
+        ->filter($request->all())
+        ->get();
+
+    // or via DB facade and macro
+    $jobs = DB::table('jobs')
+        ->filter($request->all())
+        ->get();
+
+    // or via QuickFilters instance
+    $jobs = (new QuickFilters(Job::query()))
+        ->apply($request->all())
+        ->get();
+    ...
+}
 ```
-Apply only specified filters:
-```php
-$query->filter($request->all(), ['name', 'email']);
-```
+
+1. [Requirements](#requirements)
+2. [Installation](#installation)
+3. [Configuration](#configuration)
+4. [Usage](#usage)
+   - [Make filters](#make-filters)
+   - [Register filters](#register-filters)
+   - [Available methods](#available-methods)
+5. [License](#license)
 
 ## Requirements
 - PHP `7.1` or newer
-- Laravel `5.8` or newer
+- Laravel `5.6` or newer
 
 ## Installation
 Via composer:
 ```bash
 composer require avikuloff/laravel-quickfilters
 ```
-
-If you are not using package auto-discovery, then you need to add a service provider to `config/app.php`.
+If not using package auto-discovery, then you need to add a service provider to `config/app.php`.
 ```php
-'Avikuloff\QuickFilters\QuickFiltersServiceProvider'
+Avikuloff\QuickFilters\QuickFiltersServiceProvider::class
 ```
-
-## Configuration
-Publish the configuration file with:
+Next, publish the configuration file:
 ```bash
 php artisan vendor:publish --provider="Avikuloff\QuickFilters\QuickFiltersServiceProvider" --tag="config"
 ```
 
-## Creation and configuration
-Use the following Artisan command to create a new filter class:
-```bash
-php artisan make:filter EmailFilter
-```
-This command will create a class in the `App\Filters` directory with the following contents:
+## Configuration
+Change default namespace for filter classes:
 ```php
-<?php
+'namespace' => 'App\Filters',
+```
 
+## Usage
+### Make filters
+Use the following Artisan command to create a new filter classes:
+```bash
+php artisan make:filter NameFilter EmailFilter CreatedAfter App\CustomNamespace\EmailFilter
+```
+By default, the files are published in the `App\Filters` directory, change them to suit your requirements.
+
+Example created filter `EmailFilter`:
+```php
 namespace App\Filters;
-
-use Closure;
-use Illuminate\Support\Collection;
-use Illuminate\Database\Eloquent\Builder;
-use Avikuloff\QuickFilters\Contracts\Filter;
-
-class EmailFilter implements Filter
+...
+public function handle($builder, Closure $next, Collection $collection)
 {
-    /**
-     * @param Builder $query
-     * @param Closure $next
-     * @param Collection $collection
-     * @return Builder
-     */
-    public function handle(Builder $query, Closure $next, Collection $collection): Builder
-    {
-        if ($collection->has('key')) {
-            $query->where('field', $collection->get('key'));
-        }
-
-        return $next($query);
+    if ($collection->has('email')) {
+        $builder->where('email', "%{$collection->get('email')}%");
     }
+
+    return $next($builder);
 }
 ```
-Edit this file.
+If Eloquent-specific methods (*e.g. relationships*), are called in the filter, then the class must implement the `Avikuloff\QuickFilters\Contracts\EloquentFilterContract` interface.
 
-To create multiple filters, list them separated by spaces:
+### Register filters
+Publish the configuration file:
 ```bash
-php artisan make:filter NameFilter EmailFilter JobTitleFilter
-```
-Change the default namespace:
-```bash
-php artisan make:filter App\CustomNamespace\EmailFilter
+php artisan vendor:publish --provider="Avikuloff\QuickFilters\QuickFiltersServiceProvider" --tag="config"
 ```
 
-Next, register the created filter.
 Open the `config/quickfilters.php` and add a new filter group.
-Specify the path to your model as the key of the array.
-Then list available filters for the group.
+The group name must match the database table.
 
-See example:
+Example:
 ```php
-    'groups' => [
-        Path\To\Model::class => [
-            'filterName' => 'Path\To\Filter',
-        ],
-        App\Employee::class => [
-            'name' => 'App\Filters\NameFilter',
-            'email' => 'App\Filters\EmailFilter',
-        ],
-        App\Employer::class => [
-            'name' => 'App\Filters\NameFilter',
-            'email' => 'App\Filters\EmailFilter',
-            'registered' => 'App\Filters\DateFilter',
-        ],
-        ...
+'groups' => [
+    'jobs' => [
+        Path\To\Filter::class,
     ],
+    'employees' => [
+        App\Filters\NameFilter::class,
+        App\Filters\EmailFilter::class,
+    ],
+    'employers' => [
+        App\Filters\NameFilter',
+        App\Filters\EmailFilter',
+        App\Filters\CreatedAfterFilter',
+    ],
+    ...
+],
 ```
 The created filter classes can be easily reused.
 
-## IDE Support
-Add the `_ide_macros.php` file with the following contents to the project root directory:
+### Available methods
+Macro `filter(array $data, array $filters = null)` available for `Illuminate\Database\Eloquent\Builder` and `Illuminate\Database\Query\Builder`:
 ```php
-<?php
+$query = Job::query()->filter($data);
+$query = DB::table('jobs')->filter($data);
+```
+`apply(array $data, array $filters = null)` applies all filters available for a group:
+```php
+$jobs = (new QuickFilters($query))
+    ->apply($request->all())
+    ->get();
+```
+To apply only the specified filters, pass an array of filter names second parameter:
+```php
+$jobs = (new QuickFilters($query))
+    ->apply($request->all(), [
+        EmailFilter::class,
+        NameFilter::class,
+        ...
+    ])
+    ->get();
+```
+`except(array $data, array $exceptedFilters)` apply everything except the listed:
+```php
+$jobs = (new QuickFilters($query))
+    ->except($request->all(), [
+        EmailFilter::class,
+        NameFilter::class,
+        ...
+    ])->get();
+```
+`exceptEloquentFilters(array $data)` apply everything except implement the interface `EloquentFilterContract`
 
-namespace Illuminate\Database\Eloquent {
-    /**
-     * Class Builder
-     * @package Illuminate\Database\Eloquent
-     * @method Builder filter(array $data, array $filters = null)
-     */
-    class Builder
-    {
-
-    }
-}
+`addFilters(array $filters)` add arbitrary filters:
+```php
+$jobs = (new QuickFilters($query))
+    ->addFilters([
+        EmailFilter::class,
+        NameFilter::class,
+        ...
+    ])
+    ->apply($request->all())
+    ->get();
 ```
 
 ## License

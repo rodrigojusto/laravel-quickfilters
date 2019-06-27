@@ -2,7 +2,9 @@
 
 namespace Avikuloff\QuickFilters;
 
+use Avikuloff\QuickFilters\Contracts\EloquentFilterContract;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
+use Illuminate\Database\Query\Builder as QueryBuilder;
 use Mpociot\Pipeline\Pipeline;
 
 class QuickFilters
@@ -13,23 +15,25 @@ class QuickFilters
      * @var array<int, string> The array values ​​must contain the fully qualified name of the Filter class.
      */
     public $filters;
+
     /**
      * Eloquent or Database query builder instance
      *
-     * @var EloquentBuilder|\Illuminate\Database\Query\Builder
+     * @var EloquentBuilder|QueryBuilder
      */
     protected $builder;
+
     /**
      * Query builder instance
      *
-     * @var \Illuminate\Database\Query\Builder
+     * @var QueryBuilder
      */
     protected $query;
 
     /**
-     * QuickFilter constructor.
+     * QuickFilters constructor.
      *
-     * @param \Illuminate\Database\Query\Builder|EloquentBuilder $builder
+     * @param QueryBuilder|EloquentBuilder $builder
      */
     public function __construct($builder)
     {
@@ -43,26 +47,12 @@ class QuickFilters
     }
 
     /**
-     * Applies all filters except those listed.
-     *
-     * @param array $data
-     * @param array<int, string> $filters
-     * @return \Illuminate\Database\Query\Builder|EloquentBuilder
-     */
-    public function except(array $data, array $filters)
-    {
-        $this->filters = array_diff($this->filters, $filters);
-
-        return $this->apply($data);
-    }
-
-    /**
      * Applies filters. If a filter list is transmitted,
      * then only those filters that are listed in the list are applied.
      *
      * @param array $data
      * @param array|null $filters
-     * @return \Illuminate\Database\Query\Builder|EloquentBuilder
+     * @return QueryBuilder|EloquentBuilder
      */
     public function apply(array $data, array $filters = null)
     {
@@ -77,6 +67,31 @@ class QuickFilters
             ->then(function ($builder) {
                 return $builder;
             });
+    }
+
+    /**
+     * Applies all filters except those listed.
+     *
+     * @param array $data
+     * @param array<int, string> $filters
+     * @return QueryBuilder|EloquentBuilder
+     */
+    public function except(array $data, array $filters)
+    {
+        $this->filters = array_diff($this->filters, $filters);
+
+        return $this->apply($data);
+    }
+
+    public function exceptEloquentFilters(array $data)
+    {
+        $this->filters = array_filter($this->filters, function ($filter) {
+            $interfaces = class_implements($filter);
+
+            return (isset($interfaces[EloquentFilterContract::class]));
+        });
+
+        return $this->apply($data);
     }
 
     /**
