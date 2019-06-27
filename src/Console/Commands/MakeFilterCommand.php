@@ -76,6 +76,6 @@ class MakeFilterCommand extends GeneratorCommand
      */
     protected function getDefaultNamespace($rootNamespace)
     {
-        return "{$rootNamespace}\Filters";
+        return config('quickfilters.namespace');
     }
 }

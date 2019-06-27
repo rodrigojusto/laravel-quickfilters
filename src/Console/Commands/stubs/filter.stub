@@ -4,23 +4,21 @@ namespace DummyNamespace;
 
 use Closure;
 use Illuminate\Support\Collection;
-use Illuminate\Database\Eloquent\Builder;
-use Avikuloff\QuickFilters\Contracts\Filter;
 
-class DummyClass implements Filter
+class DummyClass
 {
     /**
-     * @param Builder $query
+     * @param \Illuminate\Database\Query\Builder|\Illuminate\Database\Eloquent\Builder $builder
      * @param Closure $next
      * @param Collection $collection
-     * @return Builder
+     * @return \Illuminate\Database\Query\Builder|\Illuminate\Database\Eloquent\Builder
      */
-    public function handle(Builder $query, Closure $next, Collection $collection): Builder
+    public function handle($builder, Closure $next, Collection $collection)
     {
         if ($collection->has('key')) {
-            $query->where('field', $collection->get('key'));
+            $builder->where('field_name', "%{$collection->get('key')}%");
         }
 
-        return $next($query);
+        return $next($builder);
     }
 }
