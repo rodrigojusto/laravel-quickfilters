@@ -37,7 +37,7 @@ public function search(Request $request)
 5. [License](#license)
 
 ## Requirements
-- PHP `7.1` or newer
+- PHP `7.2` or newer
 - Laravel `5.6` or newer
 
 ## Installation
