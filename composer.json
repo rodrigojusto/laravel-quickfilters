@@ -2,7 +2,7 @@
     "name": "avikuloff/laravel-quickfilters",
     "description": "Quick filters for eloquent query builder",
     "keywords": [
-        "filter",
+        "filters",
         "search",
         "laravel",
         "eloquent",
@@ -18,9 +18,9 @@
     ],
     "require": {
         "php": "^7.1.3",
-        "illuminate/console": "5.6.*|5.7.*|5.8.*",
-        "illuminate/database": "5.6.*|5.7.*|5.8.*",
-        "illuminate/support": "5.6.*|5.7.*|5.8.*",
+        "illuminate/console": "~5.6.0|~5.7.0|~5.8.0|^6.0",
+        "illuminate/database": "~5.6.0|~5.7.0|~5.8.0|^6.0",
+        "illuminate/support": "~5.6.0|~5.7.0|~5.8.0|^6.0",
         "mpociot/pipeline": "^1.0"
     },
     "require-dev": {
